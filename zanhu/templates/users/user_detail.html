@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static thumbnail staticfiles %}
+
+{% block title %}User: {{ object.username }} - {{ block.super }}{% endblock %}
+
+{% block css %}
+{{ block.super }}
+<link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
+{% endblock css %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            {% thumbnail object.picture "x180" as im %}
+                <img src="{{ im.url }}" alt="pic">
+            {% empty %}
+                <img src="{% static 'images/user.png' %}" height="180px" alt="none_pic"/>
+            {% endthumbnail %}
+        </div>
+
+        <div class="col-md-7">
+            <div class="card card-body"><p>{{ object.introduction }}</p></div>
+        </div>
+        <div class="col-md-3">
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            {{ object.get_profile_name }}
+            <br/>
+            <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br/>
+            {% if object.job_title %}
+                <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br/>
+            {% endif %}
+            {% if object.city %}
+                <i class="fa fa-map-marker" aria-hidden="true"></i>  {{ object.city }} <br/>
+            {% endif %}
+            <div class="mb-2"></div>
+            <!--自己的页面显示更新按钮-->
+            {% if request.user.username == object.username %}
+                <a class="btn btn-primary" href="{% url 'users:update' %}">更新信息</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="clear mb-3"></div>
+    {% if object.personal_url %}
+        <a href="{{ object.personal_url }}" style="font-size: 2em" title="personal_url"><i class="fa fa-link"></i> </a>
+    {% endif %}
+    {% if object.weibo %}
+        <a href="{{ object.weibo }}" style="font-size: 2em" title="weibo"><i class="fa fa-weibo"></i> </a>
+    {% endif %}
+    {% if object.zhihu %}
+        <a href="{{ object.zhihu }}" style="font-size: 2em" title="zhihu"><i class="fa fa-quora"></i> </a>
+    {% endif %}
+    {% if object.github %}
+        <a href="{{ object.github }}" style="font-size: 2em" title="github"><i class="fa fa-github"></i> </a>
+    {% endif %}
+    {% if object.Linkedin %}
+        <a href="{{ object.Linkedin }}" style="font-size: 2em" title="linkedin"><i class="fa fa-linkedin"></i> </a>
+    {% endif %}
+
+
+
+{% if object == request.user %}
+<!-- Action buttons -->
+{#<div class="row">#}
+
+{#  <div class="col-sm-12">#}
+{#    <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>#}
+{#    <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>#}
+{#    <!-- Your Stuff: Custom user template urls -->#}
+{#  </div>#}
+
+<div class="row">
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-code"> 动态</p>
+                <div class="count">{{ moments_count }}</div>
+            </div>
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-key"> 文章</p>
+                <div class="count">{{ article_count }}</div>
+            </div>
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-comments"> 评论</p>
+                <div class="count">{{ comment_count }}</div>
+            </div>
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-question-circle"> 提问</p>
+                <div class="count">{{ question_count }}</div>
+            </div>
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-keyboard-o"> 回答</p>
+                <div class="count">{{ answer_count }}</div>
+            </div>
+            <div class="col-md-1 col-sm-3 col-xs-4 tile_stats_count">
+                <p class="fa fa-navicon"> 互动</p>
+                <div class="count">{{ interaction_count }}</div>
+            </div>
+        </div>
+
+
+{#</div>#}
+<!-- End Action buttons -->
+{% endif %}
+
+
+</div>
+{% endblock content %}

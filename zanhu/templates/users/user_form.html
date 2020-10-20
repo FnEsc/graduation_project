@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static crispy_forms_tags thumbnail %}
+
+{% block title %}{{ object.username }} - {{ block.super }}{% endblock %}
+
+
+{% block content %}
+{#  <h1>{{ user.username }}</h1>#}
+{#  <form class="form-horizontal" method="post" action="{% url 'users:update' %}">#}
+{#    {% csrf_token %}#}
+{#    {{ form|crispy }}#}
+{#    <div class="control-group">#}
+{#      <div class="controls">#}
+{#        <button type="submit" class="btn btn-primary">Update</button>#}
+{#      </div>#}
+{#    </div>#}
+{#  </form>#}
+    <div class="row profile">
+        <div class="col-md-3">
+            <h2>{{ user.username }}</h2>
+            {% if user.picture %}
+                {% thumbnail user.picture "x180" as im %}
+                    <img src="{{ im.url }}" alt="pic" id="pic">
+                {% endthumbnail %}
+            {% else %}
+                <img src="{% static 'img/user.png' %}" alt="none_ic"/>
+            {% endif %}
+        </div>
+
+        <div class="col-md-9">
+            <form enctype="multipart/form-data" class="form-horizontal" method="post" action="{% url 'users:update' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-primary">更新</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
